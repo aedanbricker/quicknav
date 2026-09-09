@@ -3,7 +3,13 @@ FROM rust:latest
 RUN git clone https://github.com/MrDogeBro/quicknav
 WORKDIR "/quicknav"
 RUN git pull --force
-RUN cargo install cargo-deb
+RUN mkdir .cargo
+RUN touch .cargo/config.toml
+RUN echo "[net]\ngit-fetch-with-cli = true" >> .cargo/config.toml
+RUN wget https://github.com/ryankurte/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz
+RUN tar -xvzf cargo-binstall-x86_64-unknown-linux-musl.tgz
+RUN ./cargo-binstall --no-confirm cargo-deb
+
 
 RUN apt update -y && apt upgrade -y
 RUN apt install libc6-dev-i386 -y
